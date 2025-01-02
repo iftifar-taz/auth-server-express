@@ -6,9 +6,9 @@ import { CreateSessionBody } from "../interfaces/session.interfaces";
 import { Types } from "mongoose";
 
 export const createUser = async (body: CreateUserBody): Promise<void> => {
-  const { name, email, password: passwordRaw } = body;
+  const { lastName, email, password } = body;
 
-  if (!name || !email || !passwordRaw) {
+  if (!lastName || !email || !password) {
     throw createHttpError(400, "Parameters missing");
   }
 
@@ -21,14 +21,10 @@ export const createUser = async (body: CreateUserBody): Promise<void> => {
     );
   }
 
-  const passwordHashed = await bcrypt.hash(passwordRaw, 10);
-
   await UserSchema.create({
-    name: name,
+    lastName: lastName,
     email: email,
-    password: passwordHashed,
-    resetPasswordToken: undefined,
-    resetPasswordExpiresAt: undefined,
+    password: password,
   });
 };
 
@@ -49,7 +45,7 @@ export const findUserByEmailAndPassword = async (
     throw createHttpError(401, "Invalid credentials");
   }
 
-  const passwordMatch = await bcrypt.compare(password, user.password);
+  const passwordMatch = await bcrypt.compare(password, user.passwordHash);
 
   if (!passwordMatch) {
     throw createHttpError(401, "Invalid credentials");
@@ -57,7 +53,7 @@ export const findUserByEmailAndPassword = async (
 
   return {
     userId: user._id as Types.ObjectId,
-    name: user.name,
+    lastName: user.lastName,
     email: user.email,
   };
 };

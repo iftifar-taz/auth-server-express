@@ -1,13 +1,13 @@
 import { Types } from "mongoose";
 
 export interface CreateUserBody {
-  name?: string;
+  lastName?: string;
   email?: string;
   password?: string;
 }
 
 export interface UserResponse {
   userId: Types.ObjectId;
-  name: string;
+  lastName: string;
   email: string;
 }

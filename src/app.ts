@@ -3,12 +3,13 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import createHttpError, { isHttpError } from "http-errors";
 import env from "./utils/env";
 import cors from "cors";
-import { sessionRoutes, userRoutes } from "./routes";
+import { sessionRoutes, userRoutes, roleRoutes, claimRoutes } from "./routes";
 import cookies from "cookie-parser";
 
 // Initialize Express app
 const app: Express = express();
 
+// Cookies setup
 app.use(cookies());
 
 // CORS setup
@@ -20,6 +21,8 @@ app.use(express.json());
 // Use routes
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/roles", roleRoutes);
+app.use("/api/claims", claimRoutes);
 
 app.use((req, res, next) => {
   next(createHttpError(404, "Endpoint not found!"));
