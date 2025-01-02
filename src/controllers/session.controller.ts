@@ -35,7 +35,7 @@ export const checkStatus: RequestHandler = async (req, res, next) => {
   console.log("aaa");
   console.log(decodedToken.user);
   try {
-    res.status(200).json(decodedToken);
+    res.status(200).json(decodedToken.user);
   } catch (error) {
     next(error);
   }

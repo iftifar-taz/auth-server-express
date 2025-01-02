@@ -4,7 +4,6 @@ import { port, str } from "envalid/dist/validators";
 export default cleanEnv(process.env, {
   MONGO_CONNECTION_STRING: str(),
   PORT: port(),
-  JWT_SECRET: str(),
   CLIENT_URL: str(),
   NODE_ENV: str(),
 });
