@@ -1,15 +1,13 @@
-import { InferSchemaType, model, Schema } from "mongoose";
+import mongoose, { InferSchemaType, model, models, Schema } from "mongoose";
 
 const claimSchema = new Schema(
   {
     name: { type: String, required: true },
-    type: { type: String },
-    users: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    roles: [{ type: Schema.Types.ObjectId, ref: "Role" }],
+    key: { type: String, required: true },
   },
   { timestamps: true }
 );
 
 export type Claim = InferSchemaType<typeof claimSchema>;
 
-export default model<Claim>("Claim", claimSchema);
+export default models.Claim || model<Claim>("Claim", claimSchema);

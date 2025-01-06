@@ -1,7 +1,6 @@
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { readFileSync } from "fs";
 import { join } from "path";
-import env from "../utils/env";
 import { UserResponse } from "../interfaces/user.interfaces";
 
 const PRIVATE_KEY = readFileSync(

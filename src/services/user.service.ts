@@ -4,6 +4,8 @@ import UserSchema from "../schemas/user";
 import bcrypt from "bcrypt";
 import { CreateSessionBody } from "../interfaces/session.interfaces";
 import { Types } from "mongoose";
+import { decodeToken } from "../utils/jwt";
+import { CustomJwtPayload } from "../interfaces/jwt.interfaces";
 
 export const createUser = async (body: CreateUserBody): Promise<void> => {
   const { lastName, email, password } = body;
@@ -26,6 +28,34 @@ export const createUser = async (body: CreateUserBody): Promise<void> => {
     email: email,
     password: password,
   });
+};
+
+export const getUsers = async (): Promise<UserResponse[]> => {
+  const users = await UserSchema.find().exec();
+  return users.map((x) => {
+    return {
+      userId: x._id,
+      lastName: x.lastName,
+      email: x.email,
+    };
+  });
+};
+
+export const getAuthenticatedUser = async (
+  token: string
+): Promise<UserResponse> => {
+  const decodedToken = decodeToken(token) as CustomJwtPayload;
+  const user = await UserSchema.findById(decodedToken.user.userId).exec();
+
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
+
+  return {
+    userId: user._id,
+    lastName: user.lastName,
+    email: user.email,
+  };
 };
 
 export const findUserByEmailAndPassword = async (

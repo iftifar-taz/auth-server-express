@@ -1,5 +1,5 @@
 import app from "./app";
-import seedDB from "./seed";
+import seedDB from "./seeding/db-seed";
 import env from "./utils/env";
 import mongoose from "mongoose";
 

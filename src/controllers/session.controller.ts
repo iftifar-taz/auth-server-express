@@ -30,12 +30,15 @@ export const createSession: RequestHandler<
 };
 
 export const checkStatus: RequestHandler = async (req, res, next) => {
-  const token = req.cookies.token;
-  const decodedToken = decodeToken(token) as CustomJwtPayload;
-  console.log("aaa");
-  console.log(decodedToken.user);
   try {
-    res.status(200).json(decodedToken.user);
+    const token = req.cookies.token;
+    const decodedToken = decodeToken(token) as CustomJwtPayload;
+
+    if (decodedToken.user.userId) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(401);
+    }
   } catch (error) {
     next(error);
   }
